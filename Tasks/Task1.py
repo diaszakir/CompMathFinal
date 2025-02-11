@@ -46,7 +46,7 @@ approximate_root = 2.5
 f_approx = f(approximate_root)
 
 # Using bisection method
-true_root = bisection_method(f, 0, 1, 1e-6)
+true_root = bisection_method(f, -2, 3, 1e-6)
 
 # Find Absolute error with formula |X-X`|
 absolute_error = abs(approximate_root - true_root)

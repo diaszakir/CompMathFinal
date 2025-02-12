@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import Task1, Task2, Task3, Task4
+import Task1, Task2, Task3, Task4, Task5, Task6, Task7, Task8
 
 def execute_Task1(a, b, tol=1e-6):
     try:
@@ -64,6 +64,20 @@ def execute_Task4(A_entries):
     
     return f"Inverse matrix (iteratively):\n{A_inv}"
 
+def execute_Task5(x_entries, y_entries):
+    try:
+        x = np.array([float(entry.get()) for entry in x_entries])
+        y = np.array([float(entry.get()) for entry in y_entries])
+    except ValueError:
+        messagebox.showerror("Error", "Please enter valid numbers!")
+        return None
+
+    fig = Task5.run(x, y)  # Вызываем метод Task5.run(), который строит график
+
+    return fig
+
+
+
 class NumericalMethodsApp:
     def __init__(self, root):
         self.root = root
@@ -79,7 +93,8 @@ class NumericalMethodsApp:
             "Graphical Method",
             "Root-Finding Comparison",
             "Jacobi Method",
-            "Matrix Inversion"
+            "Matrix Inversion",
+            "Linear Curve Fitting"
         )
         self.method_combobox.pack()
         self.method_combobox.bind("<<ComboboxSelected>>", self.show_input_fields)
@@ -137,6 +152,24 @@ class NumericalMethodsApp:
                     entry.insert(0, "0")  # Значение по умолчанию
                     row_entries.append(entry)
                 self.matrix_entries.append(row_entries)
+            
+        elif method == "Linear Curve Fitting":
+            self.x_entries = []
+            self.y_entries = []
+
+            ttk.Label(self.input_frame, text="Enter x values:").grid(row=0, column=0, pady=5)
+            for i in range(5):
+                entry = ttk.Entry(self.input_frame, width=5)
+                entry.grid(row=1, column=i, padx=5, pady=5)
+                entry.insert(0, str(i + 1))  # Значения по умолчанию
+                self.x_entries.append(entry)
+
+            ttk.Label(self.input_frame, text="Enter y values:").grid(row=2, column=0, pady=5)
+            for i in range(5):
+                entry = ttk.Entry(self.input_frame, width=5)
+                entry.grid(row=3, column=i, padx=5, pady=5)
+                entry.insert(0, str(5 + 3 * i))  # Значения по умолчанию
+                self.y_entries.append(entry)
 
         else:
             ttk.Label(self.input_frame, text="A:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
@@ -174,6 +207,9 @@ class NumericalMethodsApp:
 
         elif method == "Matrix Inversion":
             result_text = execute_Task4(self.matrix_entries)
+
+        elif method == "Linear Curve Fitting":
+            fig = execute_Task5(self.x_entries, self.y_entries)
 
         self.output_text.insert(tk.END, f"{result_text}\n")
 

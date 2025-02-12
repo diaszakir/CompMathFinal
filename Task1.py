@@ -1,12 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def f(x):
-    return np.cos(x) - x
-
-def bisection_method(f, a, b, tol):
+def bisection_method(f, a, b, tol=1e-6):
+    """Метод бисекции для поиска корня"""
     if f(a) * f(b) >= 0:
-        return None, "Invalid interval. f(a) and f(b) must have opposite signs."
+        return None, "Ошибка: f(a) и f(b) должны иметь разные знаки."
 
     midpoint = (a + b) / 2
     while abs(f(midpoint)) > tol:
@@ -18,25 +16,29 @@ def bisection_method(f, a, b, tol):
 
     return midpoint, None
 
-def solve_task1(a, b, tol):
+def f(x):
+    """Функция f(x) = cos(x) - x"""
+    return np.cos(x) - x
+
+def solve_task1(a, b):
+    """Решение задачи методом бисекции и построение графика"""
+    true_root, error_msg = bisection_method(f, a, b)
+    if error_msg:
+        return error_msg
+
     # Строим график
     x = np.linspace(a, b, 500)
     y = f(x)
 
-    fig, ax = plt.subplots()
-    ax.plot(x, y, label="f(x) = cos(x)-x")
-    ax.axhline(0, color='red', linestyle='--', label="y = 0")
-    ax.set_xlabel("x")
-    ax.set_ylabel("f(x)")
-    ax.set_title("Graphical method")
-    ax.legend()
-    ax.grid()
+    plt.figure(figsize=(8, 6))
+    plt.plot(x, y, label="f(x) = cos(x) - x", color="blue")
+    plt.axhline(0, color="red", linestyle="--", label="y = 0")
+    plt.scatter(true_root, f(true_root), color='green', label="Root (Bisection)")
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
+    plt.title("Graphical Representation")
+    plt.legend()
+    plt.grid()
+    plt.show()
 
-    # Численный корень методом бисекции
-    root, error_msg = bisection_method(f, a, b, tol)
-    
-    if error_msg:
-        return error_msg, fig
-    
-    result_text = f"Root: {root:.6f}"
-    return result_text, fig
+    return f"True Root (Bisection Method): {true_root:.6f}"

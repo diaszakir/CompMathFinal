@@ -75,14 +75,16 @@ class NumericalMethodsApp:
         self.input_frame = ttk.Frame(root)
         self.input_frame.pack(pady=10)
 
+        # Теперь текстовое поле идет ВЫШЕ графика
+        self.output_text = tk.Text(root, height=5, width=80, state="disabled")
+        self.output_text.pack(pady=5)
+
+        # Теперь график будет ниже текста
         self.canvas_frame = ttk.Frame(root)
         self.canvas_frame.pack(pady=20)
 
         self.run_button = ttk.Button(root, text="Run Method", command=self.run_method)
         self.run_button.pack()
-
-        self.output_text = tk.Text(root, height=5, width=80, state="disabled")
-        self.output_text.pack(pady=5)
 
         self.matrix_entries = []
         self.vector_entries = []
@@ -148,15 +150,15 @@ class NumericalMethodsApp:
         elif method == "Jacobi Method":
             result_text = execute_Task3(self.matrix_entries, self.vector_entries)
 
-        self.output_text.insert(tk.END, result_text + "\n")
+        # Вывод текста в `Text`
+        self.output_text.insert(tk.END, f"{result_text}\n")
 
+        # Удаляем старый график перед добавлением нового
         for widget in self.canvas_frame.winfo_children():
             widget.destroy()
 
         if fig:
-            self.display_graph(fig)  
-
-        self.output_text.config(state="disabled")
+            self.display_graph(fig)  # Отображаем график после текста
 
     def display_graph(self, fig):
         for widget in self.canvas_frame.winfo_children():

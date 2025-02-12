@@ -23,11 +23,10 @@ def iterative_inverse(A, tol=1e-6, max_iter=500):
 
     raise ValueError("Max iterations reached! Method did not converge.")
 
-def run():
-    A = np.array([[5, -3, 2], [-3, 9, -1], [2, -1, 7]], dtype=float)
-
+def run(A):
     try:
         A_inv = iterative_inverse(A)
         return A_inv
+
     except ValueError as e:
-        return e
+        return str(e)

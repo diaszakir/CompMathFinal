@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import Task1, Task2, Task3
+import Task1, Task2, Task3, Task4
 
 def execute_Task1(a, b, tol=1e-6):
     try:
@@ -53,6 +53,17 @@ def execute_Task3(A_entries, b_entries):
     
     return f"Root: {np.round(root, 6)}"
 
+def execute_Task4(A_entries):
+    try:
+        A = np.array([[float(A_entries[i][j].get()) for j in range(3)] for i in range(3)])
+    except ValueError:
+        messagebox.showerror("Error", "Please enter valid numbers!")
+        return None
+
+    A_inv = Task4.run(A)
+    
+    return f"Inverse matrix (iteratively):\n{A_inv}"
+
 class NumericalMethodsApp:
     def __init__(self, root):
         self.root = root
@@ -68,6 +79,7 @@ class NumericalMethodsApp:
             "Graphical Method",
             "Root-Finding Comparison",
             "Jacobi Method",
+            "Matrix Inversion"
         )
         self.method_combobox.pack()
         self.method_combobox.bind("<<ComboboxSelected>>", self.show_input_fields)
@@ -75,11 +87,9 @@ class NumericalMethodsApp:
         self.input_frame = ttk.Frame(root)
         self.input_frame.pack(pady=10)
 
-        # Теперь текстовое поле идет ВЫШЕ графика
         self.output_text = tk.Text(root, height=5, width=80, state="disabled")
         self.output_text.pack(pady=5)
 
-        # Теперь график будет ниже текста
         self.canvas_frame = ttk.Frame(root)
         self.canvas_frame.pack(pady=20)
 
@@ -116,6 +126,18 @@ class NumericalMethodsApp:
                 entry.insert(0, "0")  # Значение по умолчанию
                 self.vector_entries.append(entry)
 
+        elif method == "Matrix Inversion":
+            self.matrix_entries = []
+            ttk.Label(self.input_frame, text="Enter A matrix:").grid(row=0, column=0, columnspan=3, pady=5)
+            for i in range(3):
+                row_entries = []
+                for j in range(3):
+                    entry = ttk.Entry(self.input_frame, width=5)
+                    entry.grid(row=i + 1, column=j, padx=5, pady=5)
+                    entry.insert(0, "0")  # Значение по умолчанию
+                    row_entries.append(entry)
+                self.matrix_entries.append(row_entries)
+
         else:
             ttk.Label(self.input_frame, text="A:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
             self.a_entry = ttk.Entry(self.input_frame)
@@ -150,15 +172,16 @@ class NumericalMethodsApp:
         elif method == "Jacobi Method":
             result_text = execute_Task3(self.matrix_entries, self.vector_entries)
 
-        # Вывод текста в `Text`
+        elif method == "Matrix Inversion":
+            result_text = execute_Task4(self.matrix_entries)
+
         self.output_text.insert(tk.END, f"{result_text}\n")
 
-        # Удаляем старый график перед добавлением нового
         for widget in self.canvas_frame.winfo_children():
             widget.destroy()
 
         if fig:
-            self.display_graph(fig)  # Отображаем график после текста
+            self.display_graph(fig) 
 
     def display_graph(self, fig):
         for widget in self.canvas_frame.winfo_children():

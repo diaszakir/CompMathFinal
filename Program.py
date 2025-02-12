@@ -76,7 +76,17 @@ def execute_Task5(x_entries, y_entries):
 
     return fig
 
+def execute_Task6(x_entries, y_entries):
+    try:
+        x = np.array([float(entry.get()) for entry in x_entries])
+        y = np.array([float(entry.get()) for entry in y_entries])
+    except ValueError:
+        messagebox.showerror("Error", "Please enter valid numbers!")
+        return None
 
+    dy_dx = Task6.run(x, y)
+
+    return f"dy/dx at x=1: {dy_dx}"
 
 class NumericalMethodsApp:
     def __init__(self, root):
@@ -94,7 +104,8 @@ class NumericalMethodsApp:
             "Root-Finding Comparison",
             "Jacobi Method",
             "Matrix Inversion",
-            "Linear Curve Fitting"
+            "Linear Curve Fitting",
+            "Newton’s Forward Difference"
         )
         self.method_combobox.pack()
         self.method_combobox.bind("<<ComboboxSelected>>", self.show_input_fields)
@@ -171,6 +182,24 @@ class NumericalMethodsApp:
                 entry.insert(0, str(5 + 3 * i))  # Значения по умолчанию
                 self.y_entries.append(entry)
 
+        elif method == "Newton’s Forward Difference":
+            self.x_entries = []
+            self.y_entries = []
+
+            ttk.Label(self.input_frame, text="Enter x values:").grid(row=0, column=0, pady=5)
+            for i in range(3):
+                entry = ttk.Entry(self.input_frame, width=5)
+                entry.grid(row=1, column=i, padx=5, pady=5)
+                entry.insert(0, str(i + 1))  # Значения по умолчанию
+                self.x_entries.append(entry)
+
+            ttk.Label(self.input_frame, text="Enter y values:").grid(row=2, column=0, pady=5)
+            for i in range(3):
+                entry = ttk.Entry(self.input_frame, width=5)
+                entry.grid(row=3, column=i, padx=5, pady=5)
+                entry.insert(0, str(5 + 3 * i))  # Значения по умолчанию
+                self.y_entries.append(entry)
+
         else:
             ttk.Label(self.input_frame, text="A:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
             self.a_entry = ttk.Entry(self.input_frame)
@@ -210,6 +239,9 @@ class NumericalMethodsApp:
 
         elif method == "Linear Curve Fitting":
             fig = execute_Task5(self.x_entries, self.y_entries)
+
+        elif method == "Newton’s Forward Difference":
+            result_text = execute_Task6(self.x_entries, self.y_entries)
 
         self.output_text.insert(tk.END, f"{result_text}\n")
 

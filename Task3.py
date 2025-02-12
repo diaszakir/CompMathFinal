@@ -22,9 +22,11 @@ def jacobi_method(A, b, x0, tol, max_iter):
         print(x)
     return x
 
-A = np.array([[3, 1, -1], [2, -8, 1], [-1, 1, 5]], dtype=float)
-b = np.array([1, -2, 3], dtype=float)
-x0 = np.zeros(len(b))
+def run(A, b, x0, tol, max_iter):
+    # A = np.array([[3, 1, -1], [2, -8, 1], [-1, 1, 5]], dtype=float)
+    # b = np.array([1, -2, 3], dtype=float)
+    # x0 = np.zeros(len(b))
 
-root = jacobi_method(A, b, x0, tol=1e-6, max_iter=100)
-print(f"Root: {np.round(root,1)}")
+    root = jacobi_method(A, b, x0, tol=1e-6, max_iter=100)
+    return root
+    # print(f"Root: {np.round(root,1)}")

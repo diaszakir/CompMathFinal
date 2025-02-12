@@ -149,7 +149,22 @@ class NumericalMethodsApp:
             result_text = execute_Task3(self.matrix_entries, self.vector_entries)
 
         self.output_text.insert(tk.END, result_text + "\n")
+
+        for widget in self.canvas_frame.winfo_children():
+            widget.destroy()
+
+        if fig:
+            self.display_graph(fig)  
+
         self.output_text.config(state="disabled")
+
+    def display_graph(self, fig):
+        for widget in self.canvas_frame.winfo_children():
+            widget.destroy()
+
+        canvas = FigureCanvasTkAgg(fig, master=self.canvas_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
 
 if __name__ == "__main__":
     root = tk.Tk()

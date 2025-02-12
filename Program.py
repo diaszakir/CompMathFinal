@@ -88,6 +88,17 @@ def execute_Task6(x_entries, y_entries):
 
     return f"dy/dx at x=1: {dy_dx}"
 
+def execute_Task7(x1, x2):
+    try:
+        x1, x2 = float(x1), float(x2)
+    except ValueError:
+        messagebox.showerror("Error", "Please enter valid numbers!")
+        return None
+
+    y_01, y_02 = Task7.run(x1, x2)  # Запуск метода Тейлора
+    return f"y({x1}) ≈ {y_01}\ny({x2}) ≈ {y_02}"
+
+
 class NumericalMethodsApp:
     def __init__(self, root):
         self.root = root
@@ -105,7 +116,9 @@ class NumericalMethodsApp:
             "Jacobi Method",
             "Matrix Inversion",
             "Linear Curve Fitting",
-            "Newton’s Forward Difference"
+            "Newton’s Forward Difference",
+            "Taylor Series Method",
+            "Simpson's 3/8 Rule"
         )
         self.method_combobox.pack()
         self.method_combobox.bind("<<ComboboxSelected>>", self.show_input_fields)
@@ -200,6 +213,18 @@ class NumericalMethodsApp:
                 entry.insert(0, str(5 + 3 * i))  # Значения по умолчанию
                 self.y_entries.append(entry)
 
+        elif method == "Taylor Series Method":
+            ttk.Label(self.input_frame, text="Enter x1:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
+            self.x1_entry = ttk.Entry(self.input_frame)
+            self.x1_entry.grid(row=0, column=1, padx=5, pady=5)
+            self.x1_entry.insert(0, "0.1")
+
+            ttk.Label(self.input_frame, text="Enter x2:").grid(row=1, column=0, padx=5, pady=5, sticky="e")
+            self.x2_entry = ttk.Entry(self.input_frame)
+            self.x2_entry.grid(row=1, column=1, padx=5, pady=5)
+            self.x2_entry.insert(0, "0.2")
+
+
         else:
             ttk.Label(self.input_frame, text="A:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
             self.a_entry = ttk.Entry(self.input_frame)
@@ -242,6 +267,11 @@ class NumericalMethodsApp:
 
         elif method == "Newton’s Forward Difference":
             result_text = execute_Task6(self.x_entries, self.y_entries)
+
+        elif method == "Taylor Series Method":
+            x1, x2 = self.x1_entry.get(), self.x2_entry.get()
+            result_text = execute_Task7(x1, x2)
+
 
         self.output_text.insert(tk.END, f"{result_text}\n")
 

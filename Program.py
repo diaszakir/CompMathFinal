@@ -1,65 +1,121 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from Task1 import solve_task1  # Импорт модуля с задачей
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import Task1
 
-class NumericalMethodsApp(tk.Tk):
-    def __init__(self):
-        super().__init__()
+def execute_Task1(a, b, tol=1e-6):
+    try:
+        a, b = float(a), float(b)
+        if a >= b:
+            raise ValueError("The beginning must be smaller than the end!")
+    except ValueError:
+        messagebox.showerror("Error", "Type correct numbers")
+        return None, None
 
-        self.title("Numerical Methods")
-        self.geometry("500x400")
+    fig, true_root, absolute_error = Task1.run(a, b, 1e-6)
 
-        # Выбор задачи
-        tk.Label(self, text="Выберите задачу:").pack(pady=5)
+    if true_root is None:
+        messagebox.showerror("Error", "Invalid initial values. f(a) and f(b) must be of different signs.")
+        return None, None
 
-        self.task_selector = ttk.Combobox(self, state="readonly")
-        self.task_selector["values"] = [
-            "Task 1: Root-Finding (Bisection Method)",
-            "Task 2: Other Methods (Not Implemented)"
-        ]
-        self.task_selector.current(0)
-        self.task_selector.pack(pady=5)
+    return fig, f"True Root: {true_root:.6f}\nAbsolute Error: {absolute_error:e}"
 
-        # Поля ввода
-        self.create_input_field("Введите a:", "input_entry1")
-        self.create_input_field("Введите b:", "input_entry2")
+class NumericalMethodsApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Numerical Methods GUI")
+        self.root.geometry("900x700")
 
-        # Кнопка "Решить"
-        self.run_button = tk.Button(self, text="Решить", command=self.solve_task)
-        self.run_button.pack(pady=10)
+        # Выпадающий список методов
+        self.method_label = ttk.Label(root, text="Select Method:")
+        self.method_label.pack(pady=5)
 
-        # Поле вывода результата
-        self.result_output = tk.Text(self, height=5, width=50, state="disabled")
-        self.result_output.pack(pady=5)
+        self.method_var = tk.StringVar()
+        self.method_combobox = ttk.Combobox(root, textvariable=self.method_var, state="readonly")
+        self.method_combobox["values"] = (
+            "Graphical Method",
+            "Root-Finding Comparison",
+            "Jacobi Method",
+            "Iterative Matrix Inversion",
+            "Linear Curve Fitting",
+            "Newton’s Forward Difference",
+            "Taylor Series Method",
+            "Simpson’s 3/8 Rule"
+        )
+        self.method_combobox.pack()
+        self.method_combobox.bind("<<ComboboxSelected>>", self.show_input_fields)
 
-    def create_input_field(self, label_text, entry_attr):
-        tk.Label(self, text=label_text).pack()
-        entry = tk.Entry(self)
-        entry.pack(pady=5)
-        setattr(self, entry_attr, entry)
+        # Фрейм для инпутов
+        self.input_frame = ttk.Frame(root)
+        self.input_frame.pack(pady=10)
 
-    def solve_task(self):
-        task_index = self.task_selector.current()
-        try:
-            a = float(self.input_entry1.get().strip())
-            b = float(self.input_entry2.get().strip())
-        except ValueError:
-            messagebox.showerror("Ошибка", "Введите корректные числа для a и b")
+        # Фрейм для графика (размещаем ниже инпутов)
+        self.canvas_frame = ttk.Frame(root)
+        self.canvas_frame.pack(pady=20)
+
+        # Поля ввода (будут заполняться в show_input_fields)
+        self.a_entry = None
+        self.b_entry = None
+
+        # Кнопка запуска метода
+        self.run_button = ttk.Button(root, text="Run Method", command=self.run_method)
+        self.run_button.pack()
+
+        # Поле вывода текста
+        self.output_text = tk.Text(root, height=5, width=80, state="disabled")
+        self.output_text.pack(pady=5)
+
+    def show_input_fields(self, event):
+        """Создает поля для пользовательского ввода"""
+        for widget in self.input_frame.winfo_children():
+            widget.destroy()
+
+        method = self.method_var.get()
+        if method == "Graphical Method":
+            ttk.Label(self.input_frame, text="Function: cos(x) - x").grid(row=0, column=0, columnspan=2, pady=5)
+
+            ttk.Label(self.input_frame, text="X min:").grid(row=1, column=0, padx=5, pady=5, sticky="e")
+            self.a_entry = ttk.Entry(self.input_frame)
+            self.a_entry.grid(row=1, column=1, padx=5, pady=5)
+            self.a_entry.insert(0, "0")
+
+            ttk.Label(self.input_frame, text="X max:").grid(row=2, column=0, padx=5, pady=5, sticky="e")
+            self.b_entry = ttk.Entry(self.input_frame)
+            self.b_entry.grid(row=2, column=1, padx=5, pady=5)
+            self.b_entry.insert(0, "1")
+
+    def run_method(self):
+        method = self.method_var.get()
+        if not method:
+            messagebox.showerror("Error", "Choose method!")
             return
 
-        if task_index == 0:
-            result = solve_task1(a, b)
-        else:
-            result = "Эта задача еще не подключена."
+        self.output_text.config(state="normal")
+        self.output_text.delete("1.0", tk.END)
+        self.output_text.insert(tk.END, f"Running {method}...\n")
 
-        self.display_result(result)
+        if method == "Graphical Method":
+            if self.a_entry and self.b_entry:
+                a = self.a_entry.get()
+                b = self.b_entry.get()
+                fig, result_text = execute_Task1(a, b, 1e-6)
+                if fig:
+                    self.display_graph(fig)
+                    self.output_text.insert(tk.END, result_text + "\n")
 
-    def display_result(self, result):
-        self.result_output.config(state="normal")
-        self.result_output.delete("1.0", tk.END)
-        self.result_output.insert(tk.END, str(result))
-        self.result_output.config(state="disabled")
+        self.output_text.config(state="disabled")
+
+    def display_graph(self, fig):
+        """Выводит график в Tkinter"""
+        for widget in self.canvas_frame.winfo_children():
+            widget.destroy()
+
+        canvas = FigureCanvasTkAgg(fig, master=self.canvas_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
 
 if __name__ == "__main__":
-    app = NumericalMethodsApp()
-    app.mainloop()
+    root = tk.Tk()
+    app = NumericalMethodsApp(root)
+    root.mainloop()

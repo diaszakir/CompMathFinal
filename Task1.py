@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def bisection_method(f, a, b, tol=1e-6):
-    """Метод бисекции для поиска корня"""
+def bisection_method(f, a, b, tol):
     if f(a) * f(b) >= 0:
-        return None, "Ошибка: f(a) и f(b) должны иметь разные знаки."
+        print("Invalid initial values. f(a) and f(b) must be of different signs.")
+        return None
 
     midpoint = (a + b) / 2
     while abs(f(midpoint)) > tol:
@@ -14,31 +14,31 @@ def bisection_method(f, a, b, tol=1e-6):
             a = midpoint
         midpoint = (a + b) / 2
 
-    return midpoint, None
+    return midpoint
 
 def f(x):
-    """Функция f(x) = cos(x) - x"""
     return np.cos(x) - x
 
-def solve_task1(a, b):
-    """Решение задачи методом бисекции и построение графика"""
-    true_root, error_msg = bisection_method(f, a, b)
-    if error_msg:
-        return error_msg
-
-    # Строим график
-    x = np.linspace(a, b, 500)
+def run(a, b, tol):
+    x = np.linspace(0, 1, 500)  # Исправленный диапазон
     y = f(x)
 
-    plt.figure(figsize=(8, 6))
-    plt.plot(x, y, label="f(x) = cos(x) - x", color="blue")
-    plt.axhline(0, color="red", linestyle="--", label="y = 0")
-    plt.scatter(true_root, f(true_root), color='green', label="Root (Bisection)")
-    plt.xlabel("x")
-    plt.ylabel("f(x)")
-    plt.title("Graphical Representation")
-    plt.legend()
-    plt.grid()
-    plt.show()
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.plot(x, y, label="f(x) = cos(x) - x", color="blue")
+    ax.axhline(0, color="red", linestyle="--", label="y = 0")
+    ax.set_xlabel("x")
+    ax.set_ylabel("f(x)")
+    ax.set_title("Graphical Method")
+    ax.legend()
+    ax.grid()
 
-    return f"True Root (Bisection Method): {true_root:.6f}"
+    approximate_root = 0.5
+    f_approx = f(approximate_root)
+
+    true_root = bisection_method(f, a, b, tol)
+    if true_root == None:
+        absolute_error = 0
+    else:
+        absolute_error = abs(approximate_root - true_root)
+
+    return fig, true_root, absolute_error  # Возвращаем фигуру для Tkinter

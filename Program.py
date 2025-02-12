@@ -77,6 +77,9 @@ class NumericalMethodsApp:
         for widget in self.input_frame.winfo_children():
             widget.destroy()
 
+        for widget in self.canvas_frame.winfo_children():
+            widget.destroy()
+
         method = self.method_var.get()
         ttk.Label(self.input_frame, text="A:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
         self.a_entry = ttk.Entry(self.input_frame)
@@ -98,20 +101,32 @@ class NumericalMethodsApp:
         self.output_text.delete("1.0", tk.END)
         self.output_text.insert(tk.END, f"Running {method}...\n")
 
+        fig = None  # По умолчанию график отсутствует
+        result_text = ""
+
         if method == "Graphical Method":
-            a, b = self.a_entry.get(), self.b_entry.get()
-            fig, result_text = execute_Task1(a, b, 1e-6)
-            if fig:
-                self.display_graph(fig)
-                self.output_text.insert(tk.END, result_text + "\n")
+            if self.a_entry and self.b_entry:
+                a = self.a_entry.get()
+                b = self.b_entry.get()
+                fig, result_text = execute_Task1(a, b, 1e-6)
 
         elif method == "Root-Finding Comparison":
-            a, b = self.a_entry.get(), self.b_entry.get()
-            result_text = execute_Task2(a, b, 1e-6)
-            if result_text:
-                self.output_text.insert(tk.END, result_text + "\n")
+            if self.a_entry and self.b_entry:
+                a = self.a_entry.get()
+                b = self.b_entry.get()
+                result_text = execute_Task2(a, b, 1e-6)
+
+        # Добавь сюда Task5 с графиком
+        elif method == "Linear Curve Fitting":
+            fig, result_text = execute_Task5()  # Task5 также с графиком
+
+        self.output_text.insert(tk.END, result_text + "\n")
+
+        if fig:  # График только для Task1 и Task5
+            self.display_graph(fig)
 
         self.output_text.config(state="disabled")
+
 
     def display_graph(self, fig):
         for widget in self.canvas_frame.winfo_children():

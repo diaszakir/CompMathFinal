@@ -101,7 +101,7 @@ class NumericalMethodsApp:
         self.output_text.delete("1.0", tk.END)
         self.output_text.insert(tk.END, f"Running {method}...\n")
 
-        fig = None  # По умолчанию график отсутствует
+        fig = None  # По умолчанию графика нет
         result_text = ""
 
         if method == "Graphical Method":
@@ -116,16 +116,28 @@ class NumericalMethodsApp:
                 b = self.b_entry.get()
                 result_text = execute_Task2(a, b, 1e-6)
 
-        # Добавь сюда Task5 с графиком
+        # Добавляем Task5 с графиком
         elif method == "Linear Curve Fitting":
-            fig, result_text = execute_Task5()  # Task5 также с графиком
+            fig, result_text = execute_Task5()
 
         self.output_text.insert(tk.END, result_text + "\n")
 
-        if fig:  # График только для Task1 и Task5
+        # Удаляем старый график
+        for widget in self.canvas_frame.winfo_children():
+            widget.destroy()
+
+        if fig:
             self.display_graph(fig)
+            self.canvas_frame.pack(pady=10)  # Показываем график
+        else:
+            self.canvas_frame.pack_forget()  # Скрываем график, если его нет
+
+        self.run_button.pack(pady=10)  # Кнопка под графиком или под вводом
+        self.output_text.pack(pady=5)  # Вывод под кнопкой
 
         self.output_text.config(state="disabled")
+
+
 
 
     def display_graph(self, fig):

@@ -4,7 +4,7 @@ def newton_raphson(f, df, x0, tol, max_iterations=1000):
     x = x0
     iterations = 0
     while abs(f(x)) > tol:
-        if df(x) == 0:  # Проверка деления на ноль
+        if df(x) == 0:
             return None, iterations, float('inf')
 
         x_new = x - f(x) / df(x)
@@ -14,7 +14,7 @@ def newton_raphson(f, df, x0, tol, max_iterations=1000):
         iterations += 1
 
         if iterations > max_iterations:
-            return None, iterations, float('inf')  # Остановка при превышении лимита
+            return None, iterations, float('inf')
 
     return x, iterations, relative_error
 

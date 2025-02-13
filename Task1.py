@@ -20,7 +20,7 @@ def f(x):
     return np.cos(x) - x
 
 def run(a, b, tol):
-    x = np.linspace(0, 1, 500)  # Исправленный диапазон
+    x = np.linspace(0, 1, 500) 
     y = f(x)
 
     fig, ax = plt.subplots(figsize=(6, 4))
@@ -41,4 +41,4 @@ def run(a, b, tol):
     else:
         absolute_error = abs(approximate_root - true_root)
 
-    return fig, true_root, absolute_error  # Возвращаем фигуру для Tkinter
+    return fig, true_root, absolute_error  

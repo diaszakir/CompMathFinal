@@ -29,14 +29,11 @@ def run(x1, x2):
   y_triple_prime_0 = y_triple_prime.subs({x: x0, y: y0})
       
   # Taylor series expansion around x = 0
-  # Разложение в ряд Тейлора до третьего порядка
   taylor_series = y0 + y_prime_0 * x + (y_double_prime_0 * x**2) / 2 + (y_triple_prime_0 * x**3) / 6
 
-  # Вычисление значений
   y_01 = taylor_series.subs(x, x1).evalf()
   y_02 = taylor_series.subs(x, x2).evalf()
 
-  # 
   # print("Taylor Series Approximation:", taylor_series)
   # print(f"y(0.1) ≈ {y_01}")
   # print(f"y(0.2) ≈ {y_02}")

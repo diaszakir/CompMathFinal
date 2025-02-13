@@ -2,14 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def run(x, y):
-    # Линейная регрессия
     coefficients = np.polyfit(x, y, 1)  
     m, c = coefficients
 
-    # Уравнение прямой
     fit_line = m * x + c
 
-    # Создаем фигуру
     fig, ax = plt.subplots(figsize=(6, 4))
     ax.scatter(x, y, color='red', label='Data Points')
     ax.plot(x, fit_line, label=f'Best Fit: y = {m:.2f}x + {c:.2f}', color='blue')
@@ -19,4 +16,4 @@ def run(x, y):
     ax.legend()
     ax.grid()
 
-    return fig  # Возвращаем объект Figure
+    return fig

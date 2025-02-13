@@ -72,7 +72,7 @@ def execute_Task5(x_entries, y_entries):
         messagebox.showerror("Error", "Please enter valid numbers!")
         return None
 
-    fig = Task5.run(x, y)  # Вызываем метод Task5.run(), который строит график
+    fig = Task5.run(x, y) 
 
     return fig
 
@@ -164,7 +164,7 @@ class NumericalMethodsApp:
                 for j in range(3):
                     entry = ttk.Entry(self.input_frame, width=5)
                     entry.grid(row=i + 1, column=j, padx=5, pady=5)
-                    entry.insert(0, "0")  # Значение по умолчанию
+                    entry.insert(0, "0")
                     row_entries.append(entry)
                 self.matrix_entries.append(row_entries)
 
@@ -172,7 +172,7 @@ class NumericalMethodsApp:
             for i in range(3):
                 entry = ttk.Entry(self.input_frame, width=5)
                 entry.grid(row=i + 1, column=4, padx=5, pady=5)
-                entry.insert(0, "0")  # Значение по умолчанию
+                entry.insert(0, "0") 
                 self.vector_entries.append(entry)
 
         elif method == "Matrix Inversion":
@@ -183,7 +183,7 @@ class NumericalMethodsApp:
                 for j in range(3):
                     entry = ttk.Entry(self.input_frame, width=5)
                     entry.grid(row=i + 1, column=j, padx=5, pady=5)
-                    entry.insert(0, "0")  # Значение по умолчанию
+                    entry.insert(0, "0") 
                     row_entries.append(entry)
                 self.matrix_entries.append(row_entries)
             
@@ -195,14 +195,14 @@ class NumericalMethodsApp:
             for i in range(5):
                 entry = ttk.Entry(self.input_frame, width=5)
                 entry.grid(row=1, column=i, padx=5, pady=5)
-                entry.insert(0, str(i + 1))  # Значения по умолчанию
+                entry.insert(0, str(i + 1)) 
                 self.x_entries.append(entry)
 
             ttk.Label(self.input_frame, text="Enter y values:").grid(row=2, column=0, pady=5)
             for i in range(5):
                 entry = ttk.Entry(self.input_frame, width=5)
                 entry.grid(row=3, column=i, padx=5, pady=5)
-                entry.insert(0, str(5 + 3 * i))  # Значения по умолчанию
+                entry.insert(0, str(5 + 3 * i)) 
                 self.y_entries.append(entry)
 
         elif method == "Newton’s Forward Difference":
@@ -213,14 +213,14 @@ class NumericalMethodsApp:
             for i in range(3):
                 entry = ttk.Entry(self.input_frame, width=5)
                 entry.grid(row=1, column=i, padx=5, pady=5)
-                entry.insert(0, str(i + 1))  # Значения по умолчанию
+                entry.insert(0, str(i + 1)) 
                 self.x_entries.append(entry)
 
             ttk.Label(self.input_frame, text="Enter y values:").grid(row=2, column=0, pady=5)
             for i in range(3):
                 entry = ttk.Entry(self.input_frame, width=5)
                 entry.grid(row=3, column=i, padx=5, pady=5)
-                entry.insert(0, str(5 + 3 * i))  # Значения по умолчанию
+                entry.insert(0, str(5 + 3 * i)) 
                 self.y_entries.append(entry)
 
         elif method == "Taylor Series Method":

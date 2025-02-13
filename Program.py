@@ -95,8 +95,18 @@ def execute_Task7(x1, x2):
         messagebox.showerror("Error", "Please enter valid numbers!")
         return None
 
-    y_01, y_02 = Task7.run(x1, x2)  # Запуск метода Тейлора
+    y_01, y_02 = Task7.run(x1, x2) 
     return f"y({x1}) ≈ {y_01}\ny({x2}) ≈ {y_02}"
+
+def execute_Task8(a, b, n):
+    try:
+        a, b, n = int(a), int(b), int(n)
+    except ValueError:
+        messagebox.showerror("Error", "Please enter valid numbers!")
+        return None
+    
+    I, exact_value, absolute_error = Task8.run(a, b, n)
+    return f"Approximate value of the integral using Simpson's 3/8 Rule: {I}\nExact value of the integral: {exact_value}\nAbsolute error: {absolute_error}"
 
 
 class NumericalMethodsApp:
@@ -224,6 +234,22 @@ class NumericalMethodsApp:
             self.x2_entry.grid(row=1, column=1, padx=5, pady=5)
             self.x2_entry.insert(0, "0.2")
 
+        elif method == "Simpson's 3/8 Rule":
+            ttk.Label(self.input_frame, text="A:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
+            self.a_entry = ttk.Entry(self.input_frame)
+            self.a_entry.grid(row=0, column=1, padx=5, pady=5)
+            self.a_entry.insert(0, "2")
+
+            ttk.Label(self.input_frame, text="B:").grid(row=1, column=0, padx=5, pady=5, sticky="e")
+            self.b_entry = ttk.Entry(self.input_frame)
+            self.b_entry.grid(row=1, column=1, padx=5, pady=5)
+            self.b_entry.insert(0, "5")
+
+            ttk.Label(self.input_frame, text="Subinterval:").grid(row=2, column=0, padx=5, pady=5, sticky="e")
+            self.n_entry = ttk.Entry(self.input_frame)
+            self.n_entry.grid(row=2, column=1, padx=5, pady=5)
+            self.n_entry.insert(0, "6")
+
 
         else:
             ttk.Label(self.input_frame, text="A:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
@@ -271,6 +297,10 @@ class NumericalMethodsApp:
         elif method == "Taylor Series Method":
             x1, x2 = self.x1_entry.get(), self.x2_entry.get()
             result_text = execute_Task7(x1, x2)
+
+        elif method == "Simpson's 3/8 Rule":
+            a, b, n = self.a_entry.get(), self.b_entry.get(), self.n_entry.get()
+            result_text = execute_Task8(a, b, n)
 
 
         self.output_text.insert(tk.END, f"{result_text}\n")

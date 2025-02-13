@@ -95,8 +95,8 @@ def execute_Task7(x1, x2):
         messagebox.showerror("Error", "Please enter valid numbers!")
         return None
 
-    y_01, y_02 = Task7.run(x1, x2) 
-    return f"y({x1}) ≈ {y_01}\ny({x2}) ≈ {y_02}"
+    taylor_series, y_01, y_02 = Task7.run(x1, x2) 
+    return f"Taylor series:{taylor_series}\ny({x1}) ≈ {y_01}\ny({x2}) ≈ {y_02}"
 
 def execute_Task8(a, b, n):
     try:

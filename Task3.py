@@ -22,11 +22,18 @@ def jacobi_method(A, b, x0, tol, max_iter):
         print(x)
     return x
 
+def is_diagonally_dominant(A):
+    for i in range(len(A)):
+        if abs(A[i, i]) < sum(abs(A[i, j]) for j in range(len(A)) if i != j):
+            return False
+    return True
+
 def run(A, b, x0, tol, max_iter):
     # A = np.array([[3, 1, -1], [2, -8, 1], [-1, 1, 5]], dtype=float)
     # b = np.array([1, -2, 3], dtype=float)
     # x0 = np.zeros(len(b))
 
+    diagonally_dominant = is_diagonally_dominant(A)
     root = jacobi_method(A, b, x0, tol=1e-6, max_iter=100)
-    return root
+    return diagonally_dominant,root
     # print(f"Root: {np.round(root,1)}")

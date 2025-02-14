@@ -49,9 +49,9 @@ def execute_Task3(A_entries, b_entries):
         return None
 
     x0 = np.zeros(len(b))
-    root = Task3.run(A, b, x0, tol=1e-6, max_iter=100)
+    diagonally_dominant,root = Task3.run(A, b, x0, tol=1e-6, max_iter=100)
     
-    return f"Root: {np.round(root, 6)}"
+    return f"Diagonally Dominant: {diagonally_dominant}\nRoot: {np.round(root, 6)}"
 
 def execute_Task4(A_entries):
     try:
@@ -60,9 +60,9 @@ def execute_Task4(A_entries):
         messagebox.showerror("Error", "Please enter valid numbers!")
         return None
 
-    A_inv = Task4.run(A)
+    A_inv, A_inv_numpy, difference = Task4.run(A)
     
-    return f"Inverse matrix (iteratively):\n{A_inv}"
+    return f"Inverse matrix (iteratively):\n{A_inv}\n\nInverse matrix (numpy.linalg.inv):\n{A_inv_numpy}\nDifference between iterative and numpy results:\n{difference}"
 
 def execute_Task5(x_entries, y_entries):
     try:

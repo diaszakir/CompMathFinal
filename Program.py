@@ -96,7 +96,7 @@ def execute_Task7(x1, x2):
         return None
 
     taylor_series, y_01, y_02 = Task7.run(x1, x2) 
-    return f"Taylor series:{taylor_series}\ny({x1}) ≈ {y_01}\ny({x2}) ≈ {y_02}"
+    return f"Taylor series:\n{taylor_series}\ny({x1}) ≈ {y_01}\ny({x2}) ≈ {y_02}"
 
 def execute_Task8(a, b, n):
     try:
@@ -136,7 +136,7 @@ class NumericalMethodsApp:
         self.input_frame = ttk.Frame(root)
         self.input_frame.pack(pady=10)
 
-        self.output_text = tk.Text(root, height=5, width=80, state="disabled")
+        self.output_text = tk.Text(root, height=8, width=100, state="disabled")
         self.output_text.pack(pady=5)
 
         self.canvas_frame = ttk.Frame(root)
